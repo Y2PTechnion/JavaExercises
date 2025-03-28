@@ -24,13 +24,13 @@ public class MyPoint {
     }
 
     public void set(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.x  = x;
+        this.y  = y;
     }
 
     public void set(MyPoint myPoint) {
-        this.x = myPoint.getX();
-        this.y = myPoint.getY();
+        this.x  = myPoint.getX();
+        this.y  = myPoint.getY();
     }
 
     public int getX() {

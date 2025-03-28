@@ -54,15 +54,17 @@ public class MyCircle {
     }
 
     public boolean isPointInsideCircle(MyPoint point) {
-        double distanceOfPointToCenterOfCircle = point.getDistance(this.getCenter());
-        boolean pointIsInsideCircle = distanceOfPointToCenterOfCircle <= this.getRadius();
-        return pointIsInsideCircle;
+        double  distanceOfPointToCenterOfCircle = point.getDistance(this.getCenter());
+        boolean pointIsInsideCircle             = distanceOfPointToCenterOfCircle <= this.getRadius();
+
+        return  pointIsInsideCircle;
     }
 
     public boolean intersects(MyCircle otherCircle) {
-        double distanceBetweenTheCentersOfBothCircles = otherCircle.getCenter().getDistance(this.getCenter());
-        double sumOfRadiusOfBothCircles = this.getRadius() + otherCircle.getRadius();
-        boolean bothCirclesIntersects = distanceBetweenTheCentersOfBothCircles < sumOfRadiusOfBothCircles;
-        return bothCirclesIntersects;
+        double  distanceBetweenTheCentersOfBothCircles  = otherCircle.getCenter().getDistance(this.getCenter());
+        double  sumOfRadiusOfBothCircles                = this.getRadius() + otherCircle.getRadius();
+        boolean bothCirclesIntersects                   = distanceBetweenTheCentersOfBothCircles < sumOfRadiusOfBothCircles;
+
+        return  bothCirclesIntersects;
     }
 }
