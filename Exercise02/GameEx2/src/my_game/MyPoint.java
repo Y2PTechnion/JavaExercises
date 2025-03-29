@@ -12,8 +12,8 @@ package my_game;
  */
 public class MyPoint {
 
-    private int x;
-    private int y;
+    private int x   = 0;
+    private int y   = 0;
 
     public MyPoint() {
         this.set(0, 0);

@@ -12,29 +12,43 @@ package my_game;
  */
 public class MyCircle {
 
-    private MyPoint centerPoint = new MyPoint();
-    private int radius;
+    private MyPoint centerPoint = null;
+    private int radius          = 0;
 
     public MyCircle(int x, int y, int radius) {
-        this.set(x, y, radius);
+        this.centerPoint    = new MyPoint(x, y);
+        this.setRadius(radius);
     }
 
-    public MyCircle(MyPoint centerPoint, int radius) {
-        this.set(centerPoint, radius);
+    public MyCircle(MyPoint centerPoint, int radius) {   
+        this.centerPoint    = new MyPoint(centerPoint.getX(), centerPoint.getY());        
+        this.setRadius(radius);
     }
 
     public void set(int x, int y, int radius) {
-        this.centerPoint.set(x, y);
-        this.radius = radius;
+        this.setCenter(x, y);
+        this.setRadius(radius);
     }
 
     public void set(MyPoint centerPoint, int radius) {
-        this.centerPoint.set(centerPoint);
-        this.radius = radius;
+        this.setCenter(centerPoint);
+        this.setRadius(radius);
     }
 
     public void set(MyCircle circle) {
         this.set(circle.getCenter(), circle.getRadius());
+    }
+
+    public void setCenter(int x, int y) {
+        this.centerPoint.set(x, y);
+    }
+
+    public void setCenter(MyPoint centerPoint) {
+        this.centerPoint.set(centerPoint);
+    }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
     }
 
     public MyPoint getCenter() {

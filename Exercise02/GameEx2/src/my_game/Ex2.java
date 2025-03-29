@@ -111,6 +111,9 @@ import javax.swing.JFrame;
  *                      public void set(int x, int y, int radius)
  *                      public void set(MyPoint centerPoint, int radius)
  *                      public void set(MyCircle circle)
+ *                      public void setCenter(int x, int y)
+ *                      public void setCenter(MyPoint centerPoint)
+ *                      public void setRadius(int radius)
  *                      public MyPoint getCenter()
  *                      public int getRadius()
  *                      public MyCircle get()
@@ -376,7 +379,6 @@ public class Ex2 {
                 final int LOWER_LEFT_CORNER_POINT_Y     = 400;
                 final int LOWER_RIGHT_CORNER_POINT_X    = 400;
                 final int LOWER_RIGHT_CORNER_POINT_Y    = 400;
-
 
                 // Drawing the 4 circles closing the perimeter defined by 400 x 400 pixels
                Circle largeCircleUpperLeftCircle = null;
