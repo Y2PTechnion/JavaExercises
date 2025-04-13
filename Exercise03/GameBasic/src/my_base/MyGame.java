@@ -94,6 +94,7 @@ import my_ui_elements.GetNameButton;
 import my_ui_elements.MusicButton;
 import my_ui_elements.RotatePolygonButton;
 import my_ui_elements.SlowDownButton;
+import my_ui_elements.SuperMarioTypeCombo;
 import shapes.Circle;
 
 /**
@@ -167,6 +168,9 @@ public class MyGame extends Game {
 		// Add a the direction list combo
 		dashboard.addUIElement(new DirectionCombo(280, 40));
 
+        // Add a Super Mario type list combo
+        dashboard.addUIElement(new SuperMarioTypeCombo(280, 120));
+
 		// Add a the AddButton button
 		dashboard.addUIElement(new AddButton("addButton", "Add", 540, 40));
 		
@@ -192,9 +196,9 @@ public class MyGame extends Game {
 	}
 	
 	public static void main(String[] args) {
-		MyGame game = new MyGame();
+		MyGame game                     = new MyGame();
 		game.setGameContent(new MyContent());
-		MyPeriodicLoop periodicLoop = new MyPeriodicLoop();
+		MyPeriodicLoop periodicLoop     = new MyPeriodicLoop();
 		periodicLoop.setContent(game.getContent());
 		game.setPeriodicLoop(periodicLoop);
 		game.setMouseHandler(new MyMouseHandler());

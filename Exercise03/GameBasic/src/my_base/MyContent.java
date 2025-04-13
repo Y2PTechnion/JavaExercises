@@ -101,7 +101,7 @@ public class MyContent extends GameContent{
 
             switch (modificationType) {
                 case RELATIVE_SIZE: {
- //                   superMario.setSize(x, y);
+                    superMario.switchSuperMarioSize();
                     break;
                 }
 

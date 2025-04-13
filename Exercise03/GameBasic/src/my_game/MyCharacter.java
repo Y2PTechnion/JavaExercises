@@ -126,8 +126,6 @@ public class MyCharacter implements ShapeListener, Intersectable {
         */
 	public MyCharacter(ScreenPoint myCharacterLocation) {
 		imageID = "SuperMario";
-//		pokimonTable = Game.excelDB().createTableFromExcel("pokimonMoves");
-//		pokimonTable.deleteAllRows();
 		setLocation(new ScreenPoint(myCharacterLocation.x, myCharacterLocation.y));
 	}	
 
@@ -160,8 +158,6 @@ public class MyCharacter implements ShapeListener, Intersectable {
 		this.location.x += dx;
 		this.location.y += dy;
 	}
-	
-
 	
 	public int getRotation() {
 		return rotation;
@@ -233,11 +229,21 @@ public class MyCharacter implements ShapeListener, Intersectable {
     }
 
 	public void setImage(SuperMarioType superMarioType, CharacterRelative characterRelative) {
-        this.currentSuperMarioType  = superMarioType;
-        this.currentSuperMarioSize  = characterRelative;
-        this.currentSuperMarioIndex = (this.currentSuperMarioSize.baseIndex + this.currentSuperMarioType.relativeIndex);
-		Game.UI().canvas().changeImage(imageID, getImageName(), (int) Math.round(characterRelativeSize() * getImageWidth()), 
-                (int) Math.round(characterRelativeSize() * getImageHeight()));
+        if  (superMarioType != this.currentSuperMarioType || characterRelative != this.currentSuperMarioSize) {
+            if  (null == characterRelative) {
+                characterRelative = this.currentSuperMarioSize;
+            }   
+
+            if  (null == superMarioType) {
+                superMarioType = this.currentSuperMarioType;
+            }       
+
+            this.currentSuperMarioType  = superMarioType;
+            this.currentSuperMarioSize  = characterRelative;
+            this.currentSuperMarioIndex = (this.currentSuperMarioSize.baseIndex + this.currentSuperMarioType.relativeIndex);
+            Game.UI().canvas().changeImage(imageID, getImageName(), (int) Math.round(characterRelativeSize() * getImageWidth()), 
+                    (int) Math.round(characterRelativeSize() * getImageHeight()));
+        }
 	}
 
 	public void stopMoving() {
