@@ -6,6 +6,7 @@ import base.Intersectable;
 import base.ShapeListener;
 import shapes.Image;
 import ui_elements.ScreenPoint;
+import base.AudioPlayer.MusicStatus;
 
 /**
  * MyCharacter class
@@ -246,6 +247,22 @@ public class MyCharacter implements ShapeListener, Intersectable {
         }
 	}
 
+    /**
+        * startMusic method
+        * 
+        * @implNote Starts a music clip
+        *
+        * @param (String fileToStream) (Name of file to be streamed)
+        * @return (No return value)
+        */
+    public void startMusic(String fileToStream) {
+        if (Game.audioPlayer().getStatus() != MusicStatus.STOPPED) {
+            Game.audioPlayer().stop();
+        }
+        
+        Game.audioPlayer().play("resources/audio/" + fileToStream, 1);
+    }
+
 	public void stopMoving() {
 		isMoving = false;
 	}
@@ -312,8 +329,6 @@ public class MyCharacter implements ShapeListener, Intersectable {
 		return imageHeight[currentSuperMarioIndex % 4];
 	}
 
-
-
     //  ShapeListener base class methods to be implemented
     //  ShapeListener base class methods to be implemented
     //  ShapeListener base class methods to be implemented
@@ -344,7 +359,7 @@ public class MyCharacter implements ShapeListener, Intersectable {
 	@Override
 	public void shapeStartDrag(String shapeID) {
 		// Auto-generated method stub
-
+        this.startMusic("smb_world_clear.wav");
 	}
 
     /**
@@ -358,7 +373,7 @@ public class MyCharacter implements ShapeListener, Intersectable {
 	@Override
 	public void shapeEndDrag(String shapeID) {
 		// Auto-generated method stub
-
+        this.startMusic("smb_gameover.wav");
 	}
 
     /**
