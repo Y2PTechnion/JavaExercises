@@ -8,15 +8,15 @@ import ui_elements.ScreenPoint;
 import base.Game;
 import base.GameCanvas;
 import base.GameContent;
+import my_game.MyCharacter;
 import my_game.MyPolygon;
 
 public class MyContent extends GameContent{
-	private Pokimon pokimon;
-	private MyPolygon myPolygon;
+	private Pokimon         pokimon;
+	private MyPolygon       myPolygon;
 	
-	//TODO
-	//Declare your own character
-	
+	//  Declare your own character
+    private MyCharacter     superMario;
 
 	@Override
 	public void initContent() {
@@ -42,20 +42,41 @@ public class MyContent extends GameContent{
 		return myPolygon;
 	}
 	
-	public void addCharacter() {
-		//TODO
-		//Create an instance of your character and set its properties with
-		//initial values
+    /**
+        * addCharacter method
+        * 
+        * @implNote Create an instance of your character and set its properties with initial position,
+        *               adding it to the canvas.
+        *
+        * @param (ScreenPoint myCharacterLocation) (myCharacter first location into the canvas)
+        * @return (No return value)
+        */
+	public void addCharacter(ScreenPoint myCharacterLocation) {
+        if (null == superMario)
+        {
+            //  Only create a new superMario if it was not created earlier
+            superMario = new MyCharacter(myCharacterLocation);
 		
-		
-		//TODO
-		//Add your character visual representation to the canvas using its addToCanvas() method.
-
-	}
+		    //  Add your character visual representation to the canvas using its addToCanvas() method.
+            superMario.addToCanvas();
+        }
+        else
+        {
+            System.out.println("A previous 'Super Mario' object was created");
+        }
+    }
 	
-	//TODO
-	//create a method with the name myCharacter which returns
-	//your character for others to use.
+    /**
+        * superMario method
+        * 
+        * @implNote This method returns your character ('Super Mario') for others to use.
+        *
+        * @param () (No parameters)
+        * @return (MyCharacter)
+        */
+	public MyCharacter superMario() {
+		return superMario;
+	}
 
 	
 	//TODO

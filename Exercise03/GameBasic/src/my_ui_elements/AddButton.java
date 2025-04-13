@@ -2,7 +2,10 @@ package my_ui_elements;
 
 import base.Game;
 import my_base.MyContent;
+import my_game.MyCharacter;
+import my_game.Pokimon;
 import ui_elements.GameButton;
+import ui_elements.ScreenPoint;
 
 public class AddButton extends GameButton{
 	
@@ -17,9 +20,10 @@ public class AddButton extends GameButton{
 		super.action();
 		
 		MyContent content = (MyContent) Game.Content();
-		//TODO
-		//Add your character to your game content
 
+		//  Add your character to your game content
+        ScreenPoint myCharacterLocation     = new ScreenPoint(150, 500);
+        content.addCharacter(myCharacterLocation);
 	}
 
 }
