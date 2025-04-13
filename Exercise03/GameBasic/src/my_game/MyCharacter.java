@@ -1,10 +1,14 @@
 package my_game;
 
+import java.awt.Color;
+
 import base.Game;
 import base.GameCanvas;
 import base.Intersectable;
 import base.ShapeListener;
+import shapes.Circle;
 import shapes.Image;
+import shapes.Shape;
 import ui_elements.ScreenPoint;
 import base.AudioPlayer.MusicStatus;
 
@@ -23,7 +27,9 @@ import base.AudioPlayer.MusicStatus;
 public class MyCharacter implements ShapeListener, Intersectable {
 	
 	private ScreenPoint location;
-	private String imageID;
+    private int         circleAroundSuperMarioRadius;
+	private String      imageID;
+    private String      circleID;
 
 	//  New character properties
     public enum ModificationType {
@@ -93,13 +99,12 @@ public class MyCharacter implements ShapeListener, Intersectable {
         }
     }
 
-	private Direction directionPolicy                   = Direction.EAST;
-	private Direction direction                         = Direction.EAST;
+	private Direction directionPolicy                               = Direction.EAST;
+	private Direction direction                                     = Direction.EAST;
 
-
-    private SuperMarioType      currentSuperMarioType   = SuperMarioType.SUPER_MARIO_JUMPING;
-    private CharacterRelative   currentSuperMarioSize   = CharacterRelative.NORMAL;
-	private int                 currentSuperMarioIndex  = 0;
+    private SuperMarioType      currentSuperMarioType               = SuperMarioType.SUPER_MARIO_JUMPING;
+    private CharacterRelative   currentSuperMarioSize               = CharacterRelative.NORMAL;
+	private int                 currentSuperMarioIndex              = 0;
 	private final String[] images = {"resources/Mario1.jpg", "resources/Mario2.jpg", "resources/Mario3.jpg", "resources/Mario4.jpg",
                 "resources/Mario5.jpg", "resources/Mario6.jpg", "resources/Mario7.jpg", "resources/Mario8.jpg",
                 "resources/Mario9.jpg", "resources/Mario10.jpg", "resources/Mario11.jpg", "resources/Mario12.jpg"};
@@ -126,7 +131,8 @@ public class MyCharacter implements ShapeListener, Intersectable {
         * @return (MyCharacter)
         */
 	public MyCharacter(ScreenPoint myCharacterLocation) {
-		imageID = "SuperMario";
+		imageID     = "SuperMario";
+        circleID    = "circleAroundSuperMario";
 		setLocation(new ScreenPoint(myCharacterLocation.x, myCharacterLocation.y));
 	}	
 
@@ -144,6 +150,14 @@ public class MyCharacter implements ShapeListener, Intersectable {
 	
 	public String getImageID() {
 		return this.imageID;
+	}
+
+	public void setCircleID(String id) {
+		this.circleID = id;
+	}
+	
+	public String getCircleID() {
+		return this.circleID;
 	}
 
     /**
@@ -229,22 +243,46 @@ public class MyCharacter implements ShapeListener, Intersectable {
         return this.currentSuperMarioSize.factorToMultiplyFor;
     }
 
-	public void setImage(SuperMarioType superMarioType, CharacterRelative characterRelative) {
-        if  (superMarioType != this.currentSuperMarioType || characterRelative != this.currentSuperMarioSize) {
-            if  (null == characterRelative) {
-                characterRelative = this.currentSuperMarioSize;
-            }   
+    public void reDrawCircleAroundSuperMario() {
+        int currentImageWidth   = (int) Math.round(characterRelativeSize() * getNormalImageWidth());
+        int currentImageHeigth  = (int) Math.round(characterRelativeSize() * getNormalImageHeight());
 
-            if  (null == superMarioType) {
-                superMarioType = this.currentSuperMarioType;
-            }       
-
-            this.currentSuperMarioType  = superMarioType;
-            this.currentSuperMarioSize  = characterRelative;
-            this.currentSuperMarioIndex = (this.currentSuperMarioSize.baseIndex + this.currentSuperMarioType.relativeIndex);
-            Game.UI().canvas().changeImage(imageID, getImageName(), (int) Math.round(characterRelativeSize() * getImageWidth()), 
-                    (int) Math.round(characterRelativeSize() * getImageHeight()));
+        if (currentImageWidth > currentImageHeigth) {
+            this.circleAroundSuperMarioRadius = (int) (currentImageWidth / 2.0);
         }
+        else {
+            this.circleAroundSuperMarioRadius = (int) (currentImageHeigth / 2.0);
+        }       
+
+        Shape shapeAroundSuperMario     = Game.UI().canvas().getShape(circleID);
+        Circle circleAroundSuperMario   = (Circle) shapeAroundSuperMario;
+        circleAroundSuperMario.setRadius(this.circleAroundSuperMarioRadius);
+        circleAroundSuperMario.moveToLocation(location.x + this.circleAroundSuperMarioRadius,
+                    location.y + this.circleAroundSuperMarioRadius);        
+    }
+
+    public void reDrawSuperMarioCharacter() {
+        int currentImageWidth   = (int) Math.round(characterRelativeSize() * getNormalImageWidth());
+        int currentImageHeigth  = (int) Math.round(characterRelativeSize() * getNormalImageHeight());
+
+        Game.UI().canvas().changeImage(imageID, getImageName(), currentImageWidth, currentImageHeigth);
+    }
+
+	public void setImage(SuperMarioType superMarioType, CharacterRelative characterRelative) {
+        if  (null == characterRelative) {
+            characterRelative = this.currentSuperMarioSize;
+        }   
+
+        if  (null == superMarioType) {
+            superMarioType = this.currentSuperMarioType;
+        }       
+
+        this.currentSuperMarioType  = superMarioType;
+        this.currentSuperMarioSize  = characterRelative;
+        this.currentSuperMarioIndex = (this.currentSuperMarioSize.baseIndex + this.currentSuperMarioType.relativeIndex);
+        
+        reDrawSuperMarioCharacter();
+        reDrawCircleAroundSuperMario();
 	}
 
     /**
@@ -282,13 +320,29 @@ public class MyCharacter implements ShapeListener, Intersectable {
 	public void addToCanvas() {
 		GameCanvas canvas   = Game.UI().canvas();
 		//  Create the character's graphical elements and add them to the canvas
-		Image image         = new Image(getImageID(), getImageName(), 
-                                    (int) Math.round(characterRelativeSize() * getImageWidth()), 
-                                    (int) Math.round(characterRelativeSize() * getImageHeight()),
+        int currentImageWidth   = (int) Math.round(characterRelativeSize() * getNormalImageWidth());
+        int currentImageHeigth  = (int) Math.round(characterRelativeSize() * getNormalImageHeight());
+        int currentCircleRadius = (int) (currentImageWidth / 2.0);
+
+        if (currentImageHeigth > currentImageWidth) {
+            currentCircleRadius = (int) (currentImageHeigth / 2.0);
+        }
+
+		Image image         = new Image(getImageID(), getImageName(), currentImageWidth, currentImageHeigth,
                                     location.x, location.y);
 		image.setShapeListener(this);
 		image.setzOrder(3);
 		canvas.addShape(image);
+
+		Circle circleAroundSuperMario   = new Circle(getCircleID(), location.x + currentCircleRadius, 
+                    location.y + currentCircleRadius, 
+                    currentCircleRadius);
+        circleAroundSuperMario.setColor(Color.BLUE);
+        circleAroundSuperMario.setFillColor(Color.YELLOW);
+        circleAroundSuperMario.setIsFilled(true);
+        circleAroundSuperMario.setWeight(10);
+		circleAroundSuperMario.setDraggable(false);
+		canvas.addShape(circleAroundSuperMario);
 	}
 	
 	//  Add setters, getters and other methods that you need for your character
@@ -306,28 +360,41 @@ public class MyCharacter implements ShapeListener, Intersectable {
 	}
 
     /**
-        * getImageWidth method
+        * getNormalImageWidth method
         * 
-        * @implNote Image's width getter
+        * @implNote Image's width getter (only for the normal size)
         *
         * @param () (No parameters)
         * @return (int) (Image's width in pixels)
         */
-	private int getImageWidth() {
+	private int getNormalImageWidth() {
 		return imageWidth[currentSuperMarioIndex % 4];
 	}
 	
     /**
-        * getImageHeight method
+        * getNormalImageHeight method
         * 
-        * @implNote Image's height getter
+        * @implNote Image's height getter (only for the normal size)
         *
         * @param () (No parameters)
         * @return (int) (Image's height in pixels)
         */
-	private int getImageHeight() {
+	private int getNormalImageHeight() {
 		return imageHeight[currentSuperMarioIndex % 4];
 	}
+
+    /**
+        * getCircleRadius method
+        * 
+        * @implNote Circle around Super Mario radius
+        *
+        * @param () (No parameters)
+        * @return (int) (Radius in pixels)
+        */
+	public int getCircleRadius() {
+		return circleAroundSuperMarioRadius;
+	}
+
 
     //  ShapeListener base class methods to be implemented
     //  ShapeListener base class methods to be implemented
@@ -359,7 +426,6 @@ public class MyCharacter implements ShapeListener, Intersectable {
 	@Override
 	public void shapeStartDrag(String shapeID) {
 		// Auto-generated method stub
-        this.startMusic("smb_world_clear.wav");
 	}
 
     /**
@@ -373,7 +439,6 @@ public class MyCharacter implements ShapeListener, Intersectable {
 	@Override
 	public void shapeEndDrag(String shapeID) {
 		// Auto-generated method stub
-        this.startMusic("smb_gameover.wav");
 	}
 
     /**
@@ -388,7 +453,7 @@ public class MyCharacter implements ShapeListener, Intersectable {
         */
 	@Override
 	public void shapeClicked(String shapeID, int x, int y) {
-	    stopMoving();
+        stopMoving();
 	}
 
     /**
@@ -403,7 +468,8 @@ public class MyCharacter implements ShapeListener, Intersectable {
         */
 	@Override
 	public void shapeRightClicked(String shapeID, int x, int y) {
-	    switchSuperMarioSize();
+        //  Switch between the 3 possible MyCharacter sizes
+        switchSuperMarioSize();
 	}
 
     /**
