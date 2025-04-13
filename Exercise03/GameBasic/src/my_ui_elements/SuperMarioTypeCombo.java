@@ -2,9 +2,8 @@ package my_ui_elements;
 
 import base.Game;
 import my_base.MyContent;
-import my_game.MyCharacter.SuperMarioType;
+import my_game.MyCharacter;
 import ui_elements.GameComboBox;
-
 
 /**
  * SuperMarioTypeCombo class
@@ -17,7 +16,7 @@ import ui_elements.GameComboBox;
  * 
  * @author (YuvalYossiPablo)
  */
-public class SuperMarioTypeCombo extends GameComboBox{
+public class SuperMarioTypeCombo extends GameComboBox {
     MyContent myContent;
 
     public SuperMarioTypeCombo(int posX, int posY) {
@@ -26,7 +25,7 @@ public class SuperMarioTypeCombo extends GameComboBox{
         this.comboBox.setSelectedItem("Mario Jumping");
     }
 
-    public void setDirection(String superMarioCharacterType) {
+    public void setMarioCharacterType(String superMarioCharacterType) {
         this.comboBox.setSelectedItem(superMarioCharacterType);
     }
 
@@ -34,24 +33,25 @@ public class SuperMarioTypeCombo extends GameComboBox{
 	public void action() {
         super.action();
         if (null != myContent.superMario()) {
+
             switch (getOption()) {
                 case "Mario Jumping": {
-                    myContent.superMario().setImage(SuperMarioType.SUPER_MARIO_JUMPING, null);
+                    myContent.superMario().setImage(MyCharacter.SuperMarioType.SUPER_MARIO_JUMPING, null);
                     break;
                 }
 
                 case "Mario Running Left": {
-                    myContent.superMario().setImage(SuperMarioType.SUPER_MARIO_RUNNING_LEFT, null);
+                    myContent.superMario().setImage(MyCharacter.SuperMarioType.SUPER_MARIO_RUNNING_LEFT, null);
                     break;
                 }
 
                 case "Mario In Circle": {
-                    myContent.superMario().setImage(SuperMarioType.SUPER_MARIO_IN_CIRCLE, null);
+                    myContent.superMario().setImage(MyCharacter.SuperMarioType.SUPER_MARIO_IN_CIRCLE, null);
                     break;
                 }
 
                 case "Mario Running Right": {
-                    myContent.superMario().setImage(SuperMarioType.SUPER_MARIO_RUNNING_RIGHT, null);
+                    myContent.superMario().setImage(MyCharacter.SuperMarioType.SUPER_MARIO_RUNNING_RIGHT, null);
                     break;
                 }
 

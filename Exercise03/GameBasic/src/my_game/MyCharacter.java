@@ -30,6 +30,7 @@ public class MyCharacter implements ShapeListener, Intersectable {
     private int         circleAroundSuperMarioRadius;
 	private String      imageID;
     private String      circleID;
+    private int         fillColorInCircle;
 
 	//  New character properties
     public enum ModificationType {
@@ -131,8 +132,9 @@ public class MyCharacter implements ShapeListener, Intersectable {
         * @return (MyCharacter)
         */
 	public MyCharacter(ScreenPoint myCharacterLocation) {
-		imageID     = "SuperMario";
-        circleID    = "circleAroundSuperMario";
+		imageID             = "SuperMario";
+        circleID            = "circleAroundSuperMario";
+        fillColorInCircle   = 0;
 		setLocation(new ScreenPoint(myCharacterLocation.x, myCharacterLocation.y));
 	}	
 
@@ -185,32 +187,21 @@ public class MyCharacter implements ShapeListener, Intersectable {
 	}
 
     /**
-        * switchSuperMarioImage method
+        * switchSuperMarioCircleFillColor method
         * 
-        * @implNote Switchs between the 4 possible MyCharacter images
+        * @implNote Switchs between the 6 possible fill colors
         *
         * @param () (No parameters)
         * @return (No return value)
         */
-	public void switchSuperMarioImage() {
-        final SuperMarioType    currentSuperMarioType       = this.currentSuperMarioType;
-        final CharacterRelative currentSuperMarioSize       = this.currentSuperMarioSize;
-        SuperMarioType          superMarioTypeToUpdateTo    = this.currentSuperMarioType;
-
-        if (SuperMarioType.SUPER_MARIO_JUMPING == currentSuperMarioType) {
-            superMarioTypeToUpdateTo    = SuperMarioType.SUPER_MARIO_RUNNING_LEFT;
-        } 
-        else if (SuperMarioType.SUPER_MARIO_RUNNING_LEFT == currentSuperMarioType) {
-            superMarioTypeToUpdateTo    = SuperMarioType.SUPER_MARIO_IN_CIRCLE;
-        } 
-        else if (SuperMarioType.SUPER_MARIO_IN_CIRCLE == currentSuperMarioType) {
-            superMarioTypeToUpdateTo    = SuperMarioType.SUPER_MARIO_RUNNING_RIGHT;
-        } 
-        else {
-            superMarioTypeToUpdateTo    = SuperMarioType.SUPER_MARIO_JUMPING;
-        }
-  
-        setImage(superMarioTypeToUpdateTo, currentSuperMarioSize);
+	public void switchSuperMarioCircleFillColor() {
+        Color[] colour    = { Color.CYAN, Color.DARK_GRAY, Color.ORANGE, Color.LIGHT_GRAY, Color.WHITE, Color.YELLOW };  
+        
+        Shape shapeAroundSuperMario     = Game.UI().canvas().getShape(circleID);
+        Circle circleAroundSuperMario   = (Circle) shapeAroundSuperMario;
+        circleAroundSuperMario.setFillColor(colour[fillColorInCircle % colour.length]);
+        fillColorInCircle++;
+        this.reDrawCircleAroundSuperMario();
 	}
 
 /**
@@ -222,7 +213,6 @@ public class MyCharacter implements ShapeListener, Intersectable {
         * @return (No return value)
         */
 	public void switchSuperMarioSize() {
-        final SuperMarioType    currentSuperMarioType       = this.currentSuperMarioType;
         final CharacterRelative currentSuperMarioSize       = this.currentSuperMarioSize;
         CharacterRelative       superMarioSizeToUpdateTo    = this.currentSuperMarioSize;
 
@@ -232,11 +222,15 @@ public class MyCharacter implements ShapeListener, Intersectable {
         else if (CharacterRelative.DOUBLE == currentSuperMarioSize) {
             superMarioSizeToUpdateTo   = CharacterRelative.HALF;
         } 
-        else {
+        else if (CharacterRelative.HALF == currentSuperMarioSize){
             superMarioSizeToUpdateTo   = CharacterRelative.NORMAL;
         }
+        else {
+            System.out.println("Error: Super Mario size is not valid");
+            return;
+        }
   
-        setImage(currentSuperMarioType, superMarioSizeToUpdateTo);
+        setImage(null, superMarioSizeToUpdateTo);
 	}
 
     private double characterRelativeSize() {
@@ -261,28 +255,31 @@ public class MyCharacter implements ShapeListener, Intersectable {
                     location.y + this.circleAroundSuperMarioRadius);        
     }
 
-    public void reDrawSuperMarioCharacter() {
+    public void reDrawSuperMarioCharacter(boolean onlyMoveShape) {
         int currentImageWidth   = (int) Math.round(characterRelativeSize() * getNormalImageWidth());
         int currentImageHeigth  = (int) Math.round(characterRelativeSize() * getNormalImageHeight());
 
-        Game.UI().canvas().changeImage(imageID, getImageName(), currentImageWidth, currentImageHeigth);
+        Game.UI().canvas().moveShapeToLocation(imageID, location.x, location.y);
+
+        if (false == onlyMoveShape) {
+            Game.UI().canvas().changeImage(imageID, getImageName(), currentImageWidth, currentImageHeigth);
+        }
     }
 
 	public void setImage(SuperMarioType superMarioType, CharacterRelative characterRelative) {
-        if  (null == characterRelative) {
-            characterRelative = this.currentSuperMarioSize;
-        }   
-
         if  (null == superMarioType) {
-            superMarioType = this.currentSuperMarioType;
+            superMarioType          = this.currentSuperMarioType;
         }       
+
+        if  (null == characterRelative) {
+            characterRelative       = this.currentSuperMarioSize;
+        }   
 
         this.currentSuperMarioType  = superMarioType;
         this.currentSuperMarioSize  = characterRelative;
         this.currentSuperMarioIndex = (this.currentSuperMarioSize.baseIndex + this.currentSuperMarioType.relativeIndex);
-        
-        reDrawSuperMarioCharacter();
-        reDrawCircleAroundSuperMario();
+        this.reDrawCircleAroundSuperMario();
+        this.reDrawSuperMarioCharacter(false);
 	}
 
     /**
@@ -395,6 +392,17 @@ public class MyCharacter implements ShapeListener, Intersectable {
 		return circleAroundSuperMarioRadius;
 	}
 
+    /**
+        * getSuperMarioType method
+        * 
+        * @implNote Gets current Super Mario type
+        *
+        * @param () (No parameters)
+        * @return (SuperMarioType) (Super Mario current type)
+        */
+    public SuperMarioType getSuperMarioType() {
+            return currentSuperMarioType;
+        }     
 
     //  ShapeListener base class methods to be implemented
     //  ShapeListener base class methods to be implemented
@@ -475,7 +483,7 @@ public class MyCharacter implements ShapeListener, Intersectable {
     /**
         * mouseEnterShape method
         * 
-        * @implNote ShapeListener's mouseEnterShape method when the user left clicked over MyCharacter
+        * @implNote ShapeListener's mouseEnterShape method when the user is over MyCharacter
         *
         * @param (String shapeID) (shape's ID)
         * @param (int x) (x position)
@@ -484,7 +492,6 @@ public class MyCharacter implements ShapeListener, Intersectable {
         */
 	@Override
 	public void mouseEnterShape(String shapeID, int x, int y) {
-	    switchSuperMarioImage();
 	}
 
 	@Override

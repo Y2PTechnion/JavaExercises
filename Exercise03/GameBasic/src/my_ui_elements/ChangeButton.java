@@ -19,10 +19,12 @@ public class ChangeButton extends GameButton{
 		MyContent content = (MyContent) Game.Content();
 		content.polygon().exitEditMode();
 		content.polygon().getVisualPolygon().rotate(45);
-		//TODO
-		//Change your character properties by calling the appropriate method of
-		//MyContent
-		
+
+        //  Switch the image of the Super Mario character
+        if (null != content.superMario()) {
+            content.superMario().switchSuperMarioCircleFillColor();
+        }
+
 	}
 
 }

@@ -6,12 +6,14 @@ import java.awt.Rectangle;
 
 import base.Game;
 import base.GameCanvas;
+import base.GameDashboard;
 import base.PeriodicLoop;
 
 import my_game.MyCharacter;
 import shapes.Circle;
 import shapes.Shape;
 import ui_elements.ScreenPoint;
+import my_ui_elements.SuperMarioTypeCombo;
 
 public class MyPeriodicLoop extends PeriodicLoop {
 
@@ -47,6 +49,9 @@ public class MyPeriodicLoop extends PeriodicLoop {
 		
         if (null != superMario)
         {
+            //  NOTE: This logic should NOT be done here, but it is done here
+            //  only to experiment with new features as requested by the professor.
+
 		    //  Call the canvas to change the shape properties according to
 		    //  its current property values
 		    //  You can get the shape using canvas.getShape(id) with the id of your character
@@ -77,19 +82,15 @@ public class MyPeriodicLoop extends PeriodicLoop {
             
             if (0 == decisionTime) {
                 circleAroundSuperMario.setColor(Color.BLUE);
-                circleAroundSuperMario.setFillColor(Color.YELLOW);
             }
             else if (1 == decisionTime) {
-                circleAroundSuperMario.setColor(Color.GREEN);
-                circleAroundSuperMario.setFillColor(Color.YELLOW);                
+                circleAroundSuperMario.setColor(Color.RED);              
             }
             else if (2 == decisionTime) {
                 circleAroundSuperMario.setColor(Color.GREEN);
-                circleAroundSuperMario.setFillColor(Color.CYAN);
             }
             else if (3 == decisionTime) {
-                circleAroundSuperMario.setColor(Color.BLUE);
-                circleAroundSuperMario.setFillColor(Color.CYAN);
+                circleAroundSuperMario.setColor(Color.PINK);
             }   
 
             superMario.reDrawCircleAroundSuperMario();
