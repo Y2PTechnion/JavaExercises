@@ -24,7 +24,5 @@ public class ChangeButton extends GameButton{
         if (null != content.superMario()) {
             content.superMario().switchSuperMarioCircleFillColor();
         }
-
 	}
-
 }

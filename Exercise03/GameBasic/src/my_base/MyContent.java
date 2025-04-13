@@ -5,11 +5,11 @@ package my_base;
 
 import my_game.Pokimon;
 import ui_elements.ScreenPoint;
-import base.Game;
-import base.GameCanvas;
+
 import base.GameContent;
 import my_game.MyCharacter;
 import my_game.MyPolygon;
+
 
 public class MyContent extends GameContent{
 	private Pokimon         pokimon;
@@ -106,7 +106,7 @@ public class MyContent extends GameContent{
                 }
 
                 case RELATIVE_POSITION: {
-//                    superMario.setPosition(x, y);
+                    superMario.moveSuperMarioCharacter(x, y);
                     break;
                 }
                 case RELATIVE_ROTATION: {

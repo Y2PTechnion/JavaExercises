@@ -75,33 +75,6 @@ public class MyCharacter implements ShapeListener, Intersectable {
         }
     }
 	
-	//  New character properties
-    public enum Direction {
-        NORTH (0, -10),		
-        NORTH_EAST (10, -10),
-        EAST (10, 0),
-        SOUTH_EAST (10, 10),
-        SOUTH (0, 10),
-        SOUTH_WEST(-10, 10),
-        WEST (-10, 0),
-        NORTH_WEST (-10, -10);
-    
-        private final int xVec, yVec;
-        private Direction(int xVec, int yVec) {
-            this.xVec = xVec;
-            this.yVec = yVec;
-        }
-
-        public int xVec() {
-            return xVec;
-        }
-        public int yVec() {
-            return yVec;
-        }
-    }
-
-	private Direction directionPolicy                               = Direction.EAST;
-	private Direction direction                                     = Direction.EAST;
 
     private SuperMarioType      currentSuperMarioType               = SuperMarioType.SUPER_MARIO_JUMPING;
     private CharacterRelative   currentSuperMarioSize               = CharacterRelative.NORMAL;
@@ -118,8 +91,6 @@ public class MyCharacter implements ShapeListener, Intersectable {
 	private final int[] imageWidth      = {200, 200, 200, 200};
 	private final int[] imageHeight     = {199, 213, 239, 250};
 
-	
-	private boolean isMoving            = true;
 	private int rotation                = 0;	// In degrees
 	
     /**
@@ -204,7 +175,7 @@ public class MyCharacter implements ShapeListener, Intersectable {
         this.reDrawCircleAroundSuperMario();
 	}
 
-/**
+    /**
         * switchSuperMarioSize method
         * 
         * @implNote Switchs between the 3 possible MyCharacter sizes
@@ -231,6 +202,21 @@ public class MyCharacter implements ShapeListener, Intersectable {
         }
   
         setImage(null, superMarioSizeToUpdateTo);
+	}
+
+    /**
+        * moveSuperMarioCharacter method
+        * 
+        * @implNote moves Super Mario character by x and y pixels
+        *
+        * @param (int x) (x pixels to the right (if positive), or to the left (if positive))
+        * @param (int y) (y pixels down (if positive), or up (if negative))
+        * @return (No return value)
+        */
+	public void moveSuperMarioCharacter(int x, int y) {
+        this.moveLocation(x, y);
+        this.reDrawCircleAroundSuperMario();
+        this.reDrawSuperMarioCharacter(true);
 	}
 
     private double characterRelativeSize() {
@@ -297,14 +283,6 @@ public class MyCharacter implements ShapeListener, Intersectable {
         
         Game.audioPlayer().play("resources/audio/" + fileToStream, 1);
     }
-
-	public void stopMoving() {
-		isMoving = false;
-	}
-
-	public void resumeMoving() {
-		isMoving = true;
-	}
 
     /**
         * addToCanvas method
@@ -461,7 +439,6 @@ public class MyCharacter implements ShapeListener, Intersectable {
         */
 	@Override
 	public void shapeClicked(String shapeID, int x, int y) {
-        stopMoving();
 	}
 
     /**
@@ -504,8 +481,8 @@ public class MyCharacter implements ShapeListener, Intersectable {
     //  Intersectable base class method to be implemented
     @Override
     public ScreenPoint[] getIntersectionVertices() {
-        //int intersectionWidth = getImageWidth();
-        //int intersectionHeight = getImageHeight();
+        int intersectionWidth   = this.getNormalImageWidth();
+        int intersectionHeight  = this.getNormalImageHeight();
 
         int leftX = this.location.x;
         int topY = this.location.y;
@@ -518,12 +495,12 @@ public class MyCharacter implements ShapeListener, Intersectable {
         // };
         ScreenPoint[] vertices = {
 			new ScreenPoint(leftX, topY),
-		//	new ScreenPoint(leftX + intersectionWidth, topY),
-		//	new ScreenPoint(leftX + intersectionWidth, topY + intersectionHeight),
-		//	new ScreenPoint(leftX, topY + intersectionHeight)
-        new ScreenPoint(leftX, topY),
-        new ScreenPoint(leftX, topY),
-        new ScreenPoint(leftX, topY)
+		    new ScreenPoint(leftX + intersectionWidth, topY),
+		    new ScreenPoint(leftX + intersectionWidth, topY + intersectionHeight),
+		    new ScreenPoint(leftX, topY + intersectionHeight)
+        //new ScreenPoint(leftX, topY),
+        //new ScreenPoint(leftX, topY),
+        //new ScreenPoint(leftX, topY)
 	};
         return vertices;
     }

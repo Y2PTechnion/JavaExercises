@@ -6,14 +6,14 @@ import java.awt.Rectangle;
 
 import base.Game;
 import base.GameCanvas;
-import base.GameDashboard;
 import base.PeriodicLoop;
 
 import my_game.MyCharacter;
 import shapes.Circle;
 import shapes.Shape;
 import ui_elements.ScreenPoint;
-import my_ui_elements.SuperMarioTypeCombo;
+
+import base.IntersectionAlgorithm;
 
 public class MyPeriodicLoop extends PeriodicLoop {
 
@@ -33,6 +33,13 @@ public class MyPeriodicLoop extends PeriodicLoop {
 		
 		//  Redraw your character periodically by calling the correct method
         redrawCharacter();
+
+        //  Verifies if the Pokimon and Super Mario collide
+        if (null != content.superMario()) {
+            if (IntersectionAlgorithm.areIntersecting(content.pokimon(), content.superMario())) {
+                content.superMario().startMusic("automobile-horn-153260.wav");
+            }
+        }
 	}
 	
 	private void redrawPokimon() {
@@ -66,18 +73,23 @@ public class MyPeriodicLoop extends PeriodicLoop {
             final Rectangle     canvasLimits                    = canvas.getBounds();
             Shape               shapeAroundSuperMario           = canvas.getShape(circleAroundSuperMarioStringId);
             Circle              circleAroundSuperMario          = (Circle) shapeAroundSuperMario;
+            ScreenPoint         superMarioNewLocation           = new ScreenPoint((int) canvasLimits.getCenterX(), (int) canvasLimits.getCenterY());
 
             if (superMarioLocation.x < canvasLimits.x) {
                 superMario.startMusic("smb_stage_clear.wav");
+                superMario.setLocation(superMarioNewLocation);
             } 
             else if (superMarioLocation.y < canvasLimits.y) {
                 superMario.startMusic("smb_world_clear.wav");
+                superMario.setLocation(superMarioNewLocation);
             }
             else if ((superMarioLocation.x + superMario.getCircleRadius()) > canvasLimits.width) {
                 superMario.startMusic("smb_mariodie.wav");
+                superMario.setLocation(superMarioNewLocation);
             }
             else if ((superMarioLocation.y + superMario.getCircleRadius()) > canvasLimits.height) {
                 superMario.startMusic("smb_gameover.wav");
+                superMario.setLocation(superMarioNewLocation);
             }
             
             if (0 == decisionTime) {
@@ -93,6 +105,7 @@ public class MyPeriodicLoop extends PeriodicLoop {
                 circleAroundSuperMario.setColor(Color.PINK);
             }   
 
+            superMario.reDrawSuperMarioCharacter(true);
             superMario.reDrawCircleAroundSuperMario();
         }
 	}
