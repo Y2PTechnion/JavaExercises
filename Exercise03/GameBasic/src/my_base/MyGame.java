@@ -116,6 +116,7 @@ import shapes.Circle;
  *              2.2) MyContent - Insertion of the new character in the game content
  *              2.3) MyButton - Button to insert the new character
  *              2.4) First run test
+ *              2.5) Changes in character through changeCharacter() method in MyContent
  *
  *           <p>
  *           Bugs: (a list of bugs and other problems)
@@ -200,6 +201,4 @@ public class MyGame extends Game {
 		game.setKeyboardListener(new MyKeyboardListener());
 		game.initGame();
 	}
-
-
 }

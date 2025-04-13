@@ -7,9 +7,18 @@ import base.ShapeListener;
 import shapes.Image;
 import ui_elements.ScreenPoint;
 
-//TODO
-//Decide if you want to implemet the ShapeListener interface to handle drag and maouse events.
-//If so, add it to the class definition and implement the methods you want.
+/**
+ * MyCharacter class
+ * 
+ * @implNote This class implements a new character that implements also ShapeListener and
+ *              Intersectable interfaces to handle drag and mouse events, and to detect the
+ *              'collision' with another objets.
+ *
+ *           <p>
+ *           Bugs: (a list of bugs and other problems)
+ * 
+ * @author (YuvalYossiPablo)
+ */
 public class MyCharacter implements ShapeListener, Intersectable {
 	
 	private ScreenPoint location;
@@ -19,17 +28,20 @@ public class MyCharacter implements ShapeListener, Intersectable {
     public enum ModificationType {
         RELATIVE_SIZE,
         RELATIVE_POSITION,
+        RELATIVE_ROTATION,
+        RELATIVE_DIRECTION,
+        RELATIVE_SPEED,
         COLOR;
     }
 
-    public enum RelativeCharacterSize {
-        HALF(0.5, 8),
-        NORMAL(1, 0),
-        DOUBLE(2, 4);
+    public enum CharacterRelative {
+        NORMAL(1, 0),    
+        DOUBLE(2, 4),    
+        HALF(0.5, 8);
 
         private double factorToMultiplyFor;
-        private int baseIndex;
-        private RelativeCharacterSize(double factorToMultiplyFor, int baseIndex) {
+        private int     baseIndex;
+        private CharacterRelative(double factorToMultiplyFor, int baseIndex) {
             this.factorToMultiplyFor    = factorToMultiplyFor;
             this.baseIndex              = baseIndex;
         }
@@ -37,9 +49,21 @@ public class MyCharacter implements ShapeListener, Intersectable {
         public double factorToMultiplyFor() {
             return this.factorToMultiplyFor;
         }
+    }
 
-        public int baseIndexToStart() {
-            return this.baseIndex;
+  public enum SuperMarioType {
+        SUPER_MARIO_JUMPING(0),    
+        SUPER_MARIO_RUNNING_LEFT(1),    
+        SUPER_MARIO_IN_CIRCLE(2),
+        SUPER_MARIO_RUNNING_RIGHT(3);
+
+        private int     relativeIndex;
+        private SuperMarioType(int relativeIndex) {
+            this.relativeIndex  = relativeIndex;
+        }
+
+        public int relativeIndex() {
+            return this.relativeIndex;
         }
     }
 	
@@ -70,20 +94,24 @@ public class MyCharacter implements ShapeListener, Intersectable {
 
 	private Direction directionPolicy                   = Direction.EAST;
 	private Direction direction                         = Direction.EAST;
-    private RelativeCharacterSize relativeCharacterSize = RelativeCharacterSize.NORMAL;
-	
+
+
+    private SuperMarioType      currentSuperMarioType   = SuperMarioType.SUPER_MARIO_JUMPING;
+    private CharacterRelative   currentSuperMarioSize   = CharacterRelative.NORMAL;
+	private int                 currentSuperMarioIndex  = 0;
 	private final String[] images = {"resources/Mario1.jpg", "resources/Mario2.jpg", "resources/Mario3.jpg", "resources/Mario4.jpg",
                 "resources/Mario5.jpg", "resources/Mario6.jpg", "resources/Mario7.jpg", "resources/Mario8.jpg",
                 "resources/Mario9.jpg", "resources/Mario10.jpg", "resources/Mario11.jpg", "resources/Mario12.jpg"};
 
 	
 	/**
-	 * The following two arrays hold the widths and heights of the different images.
+	 *  The following two arrays hold the widths and heights of the different images (only for the first normal sizes)
+     *  The others are calculated according to the current image relative size.
 	 */
 	private final int[] imageWidth      = {200, 200, 200, 200};
 	private final int[] imageHeight     = {199, 213, 239, 250};
 
-	private int imageIndex              = 0;
+	
 	private boolean isMoving            = true;
 	private int rotation                = 0;	// In degrees
 	
@@ -146,25 +174,70 @@ public class MyCharacter implements ShapeListener, Intersectable {
 	}
 
     /**
-        * switchImage method
+        * switchSuperMarioImage method
         * 
         * @implNote Switchs between the 4 possible MyCharacter images
         *
         * @param () (No parameters)
         * @return (No return value)
         */
-	public void switchImage() {
-		setImage(1 - imageIndex);
+	public void switchSuperMarioImage() {
+        final SuperMarioType    currentSuperMarioType       = this.currentSuperMarioType;
+        final CharacterRelative currentSuperMarioSize       = this.currentSuperMarioSize;
+        SuperMarioType          superMarioTypeToUpdateTo    = this.currentSuperMarioType;
+
+        if (SuperMarioType.SUPER_MARIO_JUMPING == currentSuperMarioType) {
+            superMarioTypeToUpdateTo    = SuperMarioType.SUPER_MARIO_RUNNING_LEFT;
+        } 
+        else if (SuperMarioType.SUPER_MARIO_RUNNING_LEFT == currentSuperMarioType) {
+            superMarioTypeToUpdateTo    = SuperMarioType.SUPER_MARIO_IN_CIRCLE;
+        } 
+        else if (SuperMarioType.SUPER_MARIO_IN_CIRCLE == currentSuperMarioType) {
+            superMarioTypeToUpdateTo    = SuperMarioType.SUPER_MARIO_RUNNING_RIGHT;
+        } 
+        else {
+            superMarioTypeToUpdateTo    = SuperMarioType.SUPER_MARIO_JUMPING;
+        }
+  
+        setImage(superMarioTypeToUpdateTo, currentSuperMarioSize);
 	}
 
-    private double relativeCharacterSize() {
-        return relativeCharacterSize.factorToMultiplyFor;
+/**
+        * switchSuperMarioSize method
+        * 
+        * @implNote Switchs between the 3 possible MyCharacter sizes
+        *
+        * @param () (No parameters)
+        * @return (No return value)
+        */
+	public void switchSuperMarioSize() {
+        final SuperMarioType    currentSuperMarioType       = this.currentSuperMarioType;
+        final CharacterRelative currentSuperMarioSize       = this.currentSuperMarioSize;
+        CharacterRelative       superMarioSizeToUpdateTo    = this.currentSuperMarioSize;
+
+        if (CharacterRelative.NORMAL == currentSuperMarioSize) {
+            superMarioSizeToUpdateTo   = CharacterRelative.DOUBLE;
+        } 
+        else if (CharacterRelative.DOUBLE == currentSuperMarioSize) {
+            superMarioSizeToUpdateTo   = CharacterRelative.HALF;
+        } 
+        else {
+            superMarioSizeToUpdateTo   = CharacterRelative.NORMAL;
+        }
+  
+        setImage(currentSuperMarioType, superMarioSizeToUpdateTo);
+	}
+
+    private double characterRelativeSize() {
+        return this.currentSuperMarioSize.factorToMultiplyFor;
     }
 
-	public void setImage(int index) {
-		this.imageIndex = index;
-		Game.UI().canvas().changeImage(imageID, getImageName(), (int) Math.round(relativeCharacterSize() * getImageWidth()), 
-                (int) Math.round(relativeCharacterSize() * getImageHeight()));
+	public void setImage(SuperMarioType superMarioType, CharacterRelative characterRelative) {
+        this.currentSuperMarioType  = superMarioType;
+        this.currentSuperMarioSize  = characterRelative;
+        this.currentSuperMarioIndex = (this.currentSuperMarioSize.baseIndex + this.currentSuperMarioType.relativeIndex);
+		Game.UI().canvas().changeImage(imageID, getImageName(), (int) Math.round(characterRelativeSize() * getImageWidth()), 
+                (int) Math.round(characterRelativeSize() * getImageHeight()));
 	}
 
 	public void stopMoving() {
@@ -187,8 +260,8 @@ public class MyCharacter implements ShapeListener, Intersectable {
 		GameCanvas canvas   = Game.UI().canvas();
 		//  Create the character's graphical elements and add them to the canvas
 		Image image         = new Image(getImageID(), getImageName(), 
-                                    (int) Math.round(relativeCharacterSize() * getImageWidth()), 
-                                    (int) Math.round(relativeCharacterSize() * getImageHeight()),
+                                    (int) Math.round(characterRelativeSize() * getImageWidth()), 
+                                    (int) Math.round(characterRelativeSize() * getImageHeight()),
                                     location.x, location.y);
 		image.setShapeListener(this);
 		image.setzOrder(3);
@@ -206,7 +279,7 @@ public class MyCharacter implements ShapeListener, Intersectable {
         * @return (String) (Image's name)
         */
     public String getImageName() {
-		return images[imageIndex];
+		return images[currentSuperMarioIndex];
 	}
 
     /**
@@ -218,7 +291,7 @@ public class MyCharacter implements ShapeListener, Intersectable {
         * @return (int) (Image's width in pixels)
         */
 	private int getImageWidth() {
-		return imageWidth[imageIndex];
+		return imageWidth[currentSuperMarioIndex % 4];
 	}
 	
     /**
@@ -230,7 +303,7 @@ public class MyCharacter implements ShapeListener, Intersectable {
         * @return (int) (Image's height in pixels)
         */
 	private int getImageHeight() {
-		return imageHeight[imageIndex];
+		return imageHeight[currentSuperMarioIndex % 4];
 	}
 
 
@@ -309,7 +382,7 @@ public class MyCharacter implements ShapeListener, Intersectable {
         */
 	@Override
 	public void shapeRightClicked(String shapeID, int x, int y) {
-	//	resumeMoving();
+	    switchSuperMarioSize();
 	}
 
     /**
@@ -324,13 +397,12 @@ public class MyCharacter implements ShapeListener, Intersectable {
         */
 	@Override
 	public void mouseEnterShape(String shapeID, int x, int y) {
-	    switchImage();
+	    switchSuperMarioImage();
 	}
 
 	@Override
 	public void mouseExitShape(String shapeID, int x, int y) {
-	//	switchImage();
-
+	//  Not doing anything in the meantime
 	}
 
     //  Intersectable base class method to be implemented
