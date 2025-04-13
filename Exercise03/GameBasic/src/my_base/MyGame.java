@@ -193,6 +193,11 @@ public class MyGame extends Game {
 		t8.setFontName("Helvetica");
 		t8.setFontSize(20);
 		canvas.addShape(t8);
+		final TextLabel t9 = new TextLabel("t9", "Check what happens if Pokimon and Super Mario collide", 400, 210);
+		t9.setColor(Color.BLACK);
+		t9.setFontName("Helvetica");
+		t9.setFontSize(20);
+		canvas.addShape(t9);
 	}
 	
 	@Override

@@ -58,7 +58,13 @@ public class MyKeyboardListener extends KeyboardListener{
 	@Override
 	public void characterTyped(char c) {
 		System.out.println("key character = '" + c + "'" + " pressed.");
-	}
+        if ('r' == c) {
+            myContent.superMario().setRotation(myContent.superMario().getRotation() + 45);
+        } 
+        else if ('R' == c) {
+            myContent.superMario().setRotation(myContent.superMario().getRotation() - 45);
+        }
+    }
 	
 	@Override
 	public void enterKeyPressed() {

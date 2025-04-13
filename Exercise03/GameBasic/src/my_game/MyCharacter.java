@@ -155,6 +155,7 @@ public class MyCharacter implements ShapeListener, Intersectable {
 		this.rotation = rotation;
 		Image i = (Image) (Game.UI().canvas().getShape(imageID));
 		i.setRotation(rotation);
+        this.reDrawSuperMarioCharacter(false);
 	}
 
     /**
