@@ -95,7 +95,7 @@ import my_ui_elements.RotatePolygonButton;
 import my_ui_elements.SlowDownButton;
 import my_ui_elements.SuperMarioTypeCombo;
 import shapes.Circle;
-import shapes.TextLabel;
+import shapes.Text;
 
 /**
  * MyGame class
@@ -153,51 +153,38 @@ public class MyGame extends Game {
 		SlowDownButton slow = new SlowDownButton("SlowDown", 800, 600);
 		slow.addToCanvas();
 
-		final TextLabel t1 = new TextLabel("t1", "[Add] button to add Super Mario to canvas", 400, 10);
-		t1.setColor(Color.BLACK);
-		t1.setFontName("Helvetica");
-		t1.setFontSize(20);
-		canvas.addShape(t1);
-		final TextLabel t2 = new TextLabel("t2", "[Change] button to switch between fill colors in circle", 400, 35);
-		t2.setColor(Color.BLACK);
-		t2.setFontName("Helvetica");
-		t2.setFontSize(20);
-		canvas.addShape(t2);
-		final TextLabel t3 = new TextLabel("t3", "Keyboard cursors and mouse drag to move Super Mario", 400, 60);
-		t3.setColor(Color.BLACK);
-		t3.setFontName("Helvetica");
-		t3.setFontSize(20);
-		canvas.addShape(t3);
-		final TextLabel t4 = new TextLabel("t4", "R to rotate Super Mario", 400, 85);
-		t4.setColor(Color.BLACK);
-		t4.setFontName("Helvetica");
-		t4.setFontSize(20);
-		canvas.addShape(t4);
-		final TextLabel t5 = new TextLabel("t5", "Mouse right-click to switch between Super Mario sizes", 400, 110);
-		t5.setColor(Color.BLACK);
-		t5.setFontName("Helvetica");
-		t5.setFontSize(20);
-		canvas.addShape(t5);
-		final TextLabel t6 = new TextLabel("t6", "Combo list to switch between Super Mario characters", 400, 135);
-		t6.setColor(Color.BLACK);
-		t6.setFontName("Helvetica");
-		t6.setFontSize(20);
-		canvas.addShape(t6);
-		final TextLabel t7 = new TextLabel("t7", "Different musics while the character reaches the canvas limits", 400, 160);
-		t7.setColor(Color.BLACK);
-		t7.setFontName("Helvetica");
-		t7.setFontSize(20);
-		canvas.addShape(t7);
-		final TextLabel t8 = new TextLabel("t8", "... and brings the character into the middle of the canvas", 400, 185);
-		t8.setColor(Color.BLACK);
-		t8.setFontName("Helvetica");
-		t8.setFontSize(20);
-		canvas.addShape(t8);
-		final TextLabel t9 = new TextLabel("t9", "Check what happens if Pokimon and Super Mario collide", 400, 210);
-		t9.setColor(Color.BLACK);
-		t9.setFontName("Helvetica");
-		t9.setFontSize(20);
-		canvas.addShape(t9);
+        //  Text strings over the game background
+        final           String[] textStrings    = 
+                            { 
+                                new String("[Add] button to add Super Mario to canvas"), 
+                                new String("[Change] button to switch between fill colors in circle"),
+                                new String("Keyboard cursors and mouse drag to move Super Mario"),
+                                new String("R to rotate Super Mario"), 
+                                new String("Mouse right-click to switch between Super Mario sizes"),
+                                new String("Combo list to switch between Super Mario characters"), 
+                                new String("Different musics while the character reaches the canvas limits"),
+                                new String("... and brings the character into the middle of the canvas")};
+
+        Text[]          textOverBackground  = new Text[textStrings.length];
+        String          textID              = new String("");
+        final int       textPositionX       = 400;
+        int             textPositionY       = 20;
+        final int       textDeltaInY        = 25;
+        final int       textSize            = 20;
+        final Color     textColor           = Color.BLACK;
+        final String    textFont            = new String("Helvetica");
+
+
+        for (int textLine = 0; textLine < textStrings.length; textLine++)
+        {
+            textID                          = "textOverBackground" + Integer.toString(textLine);
+            textOverBackground[textLine]    = new Text(textID, textStrings[textLine], textPositionX, textPositionY);
+            textOverBackground[textLine].setColor(textColor);
+            textOverBackground[textLine].setFontName(textFont);
+            textOverBackground[textLine].setFontSize(textSize);
+            canvas.addShape(textOverBackground[textLine]);
+            textPositionY                   += textDeltaInY;
+        }
 	}
 	
 	@Override
