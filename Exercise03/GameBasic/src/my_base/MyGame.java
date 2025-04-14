@@ -96,6 +96,7 @@ import my_ui_elements.SlowDownButton;
 import my_ui_elements.SuperMarioTypeCombo;
 import shapes.Circle;
 import shapes.Text;
+import shapes.Image;
 
 /**
  * MyGame class
@@ -145,6 +146,7 @@ public class MyGame extends Game {
 		Circle c = new Circle("circle", 300, 300, 50);
 		c.setDraggable(false);
 		canvas.addShape(c);
+
 		/**
 		 * This is a use of a shape button.
 		 * Note that it uses the addToCanvas method of the button and is not added in the regular way,
@@ -152,6 +154,11 @@ public class MyGame extends Game {
 		 */
 		SlowDownButton slow = new SlowDownButton("SlowDown", 800, 600);
 		slow.addToCanvas();
+
+        //  Add the stop sign to the canvas, invisible
+        Image stopSign  = content.stopSign();
+        canvas.addShape(stopSign);
+        content.stopSignHide();
 
         //  Text strings over the game background
         final           String[] textStrings    = 

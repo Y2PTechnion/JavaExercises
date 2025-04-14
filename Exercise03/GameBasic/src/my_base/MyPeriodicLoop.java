@@ -7,7 +7,7 @@ import java.awt.Rectangle;
 import base.Game;
 import base.GameCanvas;
 import base.PeriodicLoop;
-
+import javafx.scene.image.Image;
 import my_game.MyCharacter;
 import shapes.Circle;
 import shapes.Shape;
@@ -37,7 +37,14 @@ public class MyPeriodicLoop extends PeriodicLoop {
         //  Verifies if the Pokimon and Super Mario collide
         if (null != content.superMario()) {
             if (IntersectionAlgorithm.areIntersecting(content.pokimon(), content.superMario())) {
+                //  Shows the stop sign
+                ScreenPoint superMarioCoordinates   = content.superMario().getLocation();
+                content.stopSignShow(superMarioCoordinates.x, superMarioCoordinates.y);
                 content.superMario().startMusic("automobile-horn-153260.wav");
+            }
+            else {
+                //  Hides the stop sign
+                content.stopSignHide();
             }
         }
 	}

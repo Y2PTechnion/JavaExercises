@@ -25,6 +25,7 @@ public class MusicButton extends GameImageButton{
 			//this.setText("Stop");
 			Game.UI().canvas().setBackgroundImage("resources/background2.jpg");
 
+            //  Text strings over the game background
             String      textID      = new String("");
             int         textLine    = 0;
             Text        text        = null;
@@ -47,7 +48,7 @@ public class MusicButton extends GameImageButton{
 			//this.setText("Play");
 			Game.UI().canvas().setBackgroundImage("resources/background1.jpg");
 
-
+            //  Text strings over the game background
             String      textID      = new String("");
             int         textLine    = 0;
             Text        text        = null;

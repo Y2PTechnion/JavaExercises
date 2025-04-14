@@ -9,14 +9,17 @@ import ui_elements.ScreenPoint;
 import base.GameContent;
 import my_game.MyCharacter;
 import my_game.MyPolygon;
+import shapes.Shape;
+import shapes.Image;
 
 
-public class MyContent extends GameContent{
+public class MyContent extends GameContent {
 	private Pokimon         pokimon;
 	private MyPolygon       myPolygon;
 	
 	//  Declare your own character
     private MyCharacter     superMario;
+    private Image           stopImage;
 
 	@Override
 	public void initContent() {
@@ -32,6 +35,11 @@ public class MyContent extends GameContent{
 		};
 
 		myPolygon = new MyPolygon(points);
+
+        //  Create the stop image and hide it
+        stopImage   = new Image("stopImage", "resources/stop-hand-floor-graphic-marker-1_1.jpg", 100, 75, 200,200);
+        stopImage.setzOrder(10);
+        stopSignHide();
 	}	
 	
 	public Pokimon pokimon() {
@@ -78,6 +86,42 @@ public class MyContent extends GameContent{
 		return superMario;
 	}
 
+    /**
+        * stopSign method
+        * 
+        * @implNote This method returns the stop sign to be shown when there is collision for others to use.
+        *
+        * @param () (No parameters)
+        * @return (Image)
+        */
+	public Image stopSign() {
+		return stopImage;
+	}
+
+    /**
+        * stopSignHide method
+        * 
+        * @implNote This method hides the stop sign
+        *
+        * @param () (No parameters)
+        * @return (No return value)
+        */
+	public void stopSignHide() {
+		stopImage.setStatus(Shape.STATUS.HIDE);
+	}
+
+    /**
+        * stopSignShow method
+        * 
+        * @implNote This method shows the stop sign
+        *
+        * @param (int x) (No parameters)
+        * @return (No return value)
+        */
+	public void stopSignShow(int x, int y) {
+        stopImage.moveToLocation(x, y);
+		stopImage.setStatus(Shape.STATUS.SHOW);
+	}
 	
     /**
         * changeCharacter method
