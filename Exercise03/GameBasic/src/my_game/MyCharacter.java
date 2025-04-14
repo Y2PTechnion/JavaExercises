@@ -75,7 +75,6 @@ public class MyCharacter implements ShapeListener, Intersectable {
         }
     }
 	
-
     private SuperMarioType      currentSuperMarioType               = SuperMarioType.SUPER_MARIO_JUMPING;
     private CharacterRelative   currentSuperMarioSize               = CharacterRelative.NORMAL;
 	private int                 currentSuperMarioIndex              = 0;
@@ -83,7 +82,6 @@ public class MyCharacter implements ShapeListener, Intersectable {
                 "resources/Mario5.jpg", "resources/Mario6.jpg", "resources/Mario7.jpg", "resources/Mario8.jpg",
                 "resources/Mario9.jpg", "resources/Mario10.jpg", "resources/Mario11.jpg", "resources/Mario12.jpg"};
 
-	
 	/**
 	 *  The following two arrays hold the widths and heights of the different images (only for the first normal sizes)
      *  The others are calculated according to the current image relative size.
@@ -92,6 +90,7 @@ public class MyCharacter implements ShapeListener, Intersectable {
 	private final int[] imageHeight     = {199, 213, 239, 250};
 
 	private int rotation                = 0;	// In degrees
+    private int speed                   = 1;    // In pixels
 	
     /**
         * MyCharacter constructor method
@@ -156,6 +155,16 @@ public class MyCharacter implements ShapeListener, Intersectable {
 		Image i = (Image) (Game.UI().canvas().getShape(imageID));
 		i.setRotation(rotation);
         this.reDrawSuperMarioCharacter(false);
+	}
+
+	public int getSpeed() {
+		return this.speed;
+	}
+
+	public void setSpeed(int speed) {
+        if (speed >= 0 && speed <= 100) {       
+            this.speed  = speed;
+        }
 	}
 
     /**

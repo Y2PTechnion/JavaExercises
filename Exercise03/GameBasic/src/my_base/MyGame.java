@@ -166,15 +166,18 @@ public class MyGame extends Game {
                                 new String("[Add] button to add Super Mario to canvas"), 
                                 new String("[Change] button to switch between fill colors in circle"),
                                 new String("Keyboard cursors and mouse drag to move Super Mario"),
-                                new String("R to rotate Super Mario"), 
+                                new String("R to rotate Super Mario counter clockwise, r clockwise"), 
+                                new String("P/p to increase movement speed, M/m to decrease"), 
                                 new String("Mouse right-click to switch between Super Mario sizes"),
                                 new String("Combo list to switch between Super Mario characters"), 
                                 new String("Different musics while the character reaches the canvas limits"),
-                                new String("... and brings the character into the middle of the canvas")};
+                                new String("... and brings the character into the middle of the canvas"),
+                                new String("Circle around Super Mario perimeter color changes in a cyclic way"),
+                                new String("Background change (music button), modifies the color of these lines")};
 
         Text[]          textOverBackground  = new Text[textStrings.length];
         String          textID              = new String("");
-        final int       textPositionX       = 400;
+        final int       textPositionX       = 300;
         int             textPositionY       = 20;
         final int       textDeltaInY        = 25;
         final int       textSize            = 20;

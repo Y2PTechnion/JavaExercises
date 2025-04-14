@@ -25,7 +25,7 @@ public class MyKeyboardListener extends KeyboardListener{
 			    myContent.pokimon().setDirectionPolicy(Pokimon.Direction.RIGHT);
 			    ((DirectionCombo) (Game.UI().dashboard().getUIElement("directionCombo"))).setDirection("Right");
                 //  Moves Super Mario to right
-                myContent.changeCharacter(MyCharacter.ModificationType.RELATIVE_POSITION, 5, 0);
+                myContent.changeCharacter(MyCharacter.ModificationType.RELATIVE_POSITION, myContent.superMario().getSpeed(), 0);
 			    break;
             }
 
@@ -33,7 +33,7 @@ public class MyKeyboardListener extends KeyboardListener{
 			    myContent.pokimon().setDirectionPolicy(Pokimon.Direction.LEFT);
 			    ((DirectionCombo) (Game.UI().dashboard().getUIElement("directionCombo"))).setDirection("Left");
                 //  Moves Super Mario to left
-                myContent.changeCharacter(MyCharacter.ModificationType.RELATIVE_POSITION, -5, 0);
+                myContent.changeCharacter(MyCharacter.ModificationType.RELATIVE_POSITION, -myContent.superMario().getSpeed(), 0);
 			    break;
             }
 
@@ -41,7 +41,7 @@ public class MyKeyboardListener extends KeyboardListener{
 			    //myContent.pokimon().setDirectionPolicy(Pokimon.Direction.UP);
 			    myContent.pokimon().setRotation(myContent.pokimon().getRotation() + 20);
                 //  Moves Super Mario up
-                myContent.changeCharacter(MyCharacter.ModificationType.RELATIVE_POSITION, 0, -5);
+                myContent.changeCharacter(MyCharacter.ModificationType.RELATIVE_POSITION, 0, -myContent.superMario().getSpeed());
 			    break;
             }
 
@@ -49,7 +49,7 @@ public class MyKeyboardListener extends KeyboardListener{
 			    //myContent.pokimon().setDirectionPolicy(Pokimon.Direction.DOWN);
 			    myContent.pokimon().setRotation(myContent.pokimon().getRotation() - 20);
                 //  Moves Super Mario down
-                myContent.changeCharacter(MyCharacter.ModificationType.RELATIVE_POSITION, 0, 5);
+                myContent.changeCharacter(MyCharacter.ModificationType.RELATIVE_POSITION, 0, myContent.superMario().getSpeed());
 			    break;
             }
 		}
@@ -59,10 +59,16 @@ public class MyKeyboardListener extends KeyboardListener{
 	public void characterTyped(char c) {
 		System.out.println("key character = '" + c + "'" + " pressed.");
         if ('r' == c) {
-            myContent.superMario().setRotation(myContent.superMario().getRotation() + 45);
+            myContent.changeCharacter(MyCharacter.ModificationType.RELATIVE_ROTATION, 45);
         } 
         else if ('R' == c) {
-            myContent.superMario().setRotation(myContent.superMario().getRotation() - 45);
+            myContent.changeCharacter(MyCharacter.ModificationType.RELATIVE_ROTATION, -45);
+        }
+        else if (('P' == c) || ('p' == c)) {
+            myContent.changeCharacter(MyCharacter.ModificationType.RELATIVE_SPEED, 2);
+        } 
+        else if (('M' == c) || ('m' == c)) {
+            myContent.changeCharacter(MyCharacter.ModificationType.RELATIVE_SPEED, -2);
         }
     }
 	

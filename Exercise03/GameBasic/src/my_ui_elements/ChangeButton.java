@@ -17,8 +17,8 @@ public class ChangeButton extends GameButton{
 		super.action();
 		
 		MyContent content = (MyContent) Game.Content();
-		content.polygon().exitEditMode();
-		content.polygon().getVisualPolygon().rotate(45);
+//		content.polygon().exitEditMode();
+//		content.polygon().getVisualPolygon().rotate(45);
 
         //  Switch the image of the Super Mario character
         if (null != content.superMario()) {

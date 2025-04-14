@@ -134,10 +134,16 @@ public class MyContent extends GameContent {
         *               would use the character reference as a parameter.   
         *
         * @param (ModificationType modificationType) (Type of modification we want to perform)
-        * @param (int x) (x position)
-        * @param (int y) (y position)
+        * @param (int x) (x position) - optional for overloading
+        * @param (int y) (y position) - optional for overloading
         * @return (No return value)
         */
+    public void changeCharacter(MyCharacter.ModificationType modificationType) {
+        changeCharacter(modificationType, 0, 0);
+    }
+    public void changeCharacter(MyCharacter.ModificationType modificationType, int x) {
+        changeCharacter(modificationType, x, 0);
+    }
     public void changeCharacter(MyCharacter.ModificationType modificationType, int x, int y) {
         if (null != superMario)
         {
@@ -154,7 +160,7 @@ public class MyContent extends GameContent {
                     break;
                 }
                 case RELATIVE_ROTATION: {
- //                   superMario.setRotation(x);
+                    superMario.setRotation(superMario.getRotation() + x);
                     break;
                 }       
                 case RELATIVE_DIRECTION: {
@@ -162,7 +168,7 @@ public class MyContent extends GameContent {
                     break;
                 }   
                 case RELATIVE_SPEED: {
- //                   superMario.setSpeed(x);
+                    superMario.setSpeed(superMario.getSpeed() + x);
                     break;
                 }   
 
